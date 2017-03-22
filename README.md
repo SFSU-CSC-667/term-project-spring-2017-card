@@ -3,7 +3,9 @@
 A multiplayer battleship game with an integrated chat system.
 
 #Technology
+```
 Node.js, Javascript, Express, PostgreSQL<br />
+```
 
 **Team Member**
 * Ahmed Salem
