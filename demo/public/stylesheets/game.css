@@ -34,8 +34,6 @@ h3 {
 
 .panel-primary > .panel-heading, .btn-primary, .btn-primary:active, .btn-primary:focus {
     border-radius: 0px;
-    background-color: #333;
-    border-color: #333;
 }
 
 .btn-primary:hover {
