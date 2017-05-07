@@ -19,6 +19,10 @@ router.get('/register', function (req, res, next) {
     res.render('index');
 });
 
+router.get('/game', function (req, res, next) {
+    res.render('game');
+});
+
 router.post('/login', function (req, res, next) {
     const username = req.body.username;
     const password = req.body.password;

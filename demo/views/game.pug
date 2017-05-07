@@ -1,0 +1,56 @@
+block contenet
+  doctype html
+  html
+    head
+      title Battleship
+      meta(charset='UTF-8')
+      link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css')
+      link(rel='stylesheet', href='/stylesheets/game.css')
+      meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    body
+      .container
+        .row.vertical-center-row
+          .col-md-12
+            #disconnected
+              .row
+                .col-sm-4.col-sm-offset-4.text-center
+                  .alert.alert-danger
+                    p Not connected to server.
+            #waiting-room(style='display:none;')
+              .row
+                .col-sm-4.col-sm-offset-4.text-center
+                  .panel.panel-primary
+                    .panel-heading Waiting Room
+                    .panel-body
+                      p You are connected to the server.
+                      p Waiting for another player...
+            #game(style='display:none;')
+              .row
+                .col-md-12
+                  .panel.panel-primary
+                    .panel-heading
+                      | Battleship Game #
+                      span#game-number
+                    .panel-body
+                      .row
+                        .col-md-6.player-grid.text-center
+                          h3 You
+                          canvas#canvas-grid1(width='361', height='361') Browser does not support canvas.
+                        .col-md-6.player-grid.text-center
+                          h3 Opponent
+                          canvas#canvas-grid2(width='361', height='361') Browser does not support canvas.
+                    ul.list-group
+                      li#turn-status.list-group-item.text-center
+                      li#messages-list.list-group-item
+                        ul#messages
+                      li.list-group-item
+                        form#message-form(action='')
+                          .input-group
+                            input#message.form-control(autocomplete='off')
+                            .input-group-btn
+                              button.btn.btn-primary Send Message
+      script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js')
+      script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js')
+      script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js')
+      script(src='javascripts/game.js')
+      script(src='javascripts/client.js')
