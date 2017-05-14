@@ -24,37 +24,48 @@ router.get('/game', function (req, res, next) {
 });
 
 router.post('/login', function (req, res, next) {
-    const username = req.body.username;
-    const password = req.body.password;
+  const username = req.body.username;
+  const password = req.body.password;
 
-    db.battleshipDB.one("select * from player where username=$1", [username])
-        .then(function (data) {
-            bcrypt.compare(password, data.password, function (err, passwordValid) {
-                if (!passwordValid)
-                    res.json({success: false, user: data, message: "Login failed"});
-                else{
-                      console.log("Success: user " + username + " login");
-                      res.json({success: true, user: data})
-                }
-            });
+  db.battleshipDB.one("select * from player where username=$1", [username])
+      .then(function (data) {
+          bcrypt.compare(password, data.password, function (err, passwordValid) {
+              if (!passwordValid)
+                  res.json({success: false, user: data, message: "Login failed"});
+              else{
+                    console.log("Success: user " + username + " login");
+                    res.json({success: true, user: data})
+              }
+          });
 
-        })
-        .catch(function (error) {
-            console.log("Catch: " + error);
-            res.status(403).json({
-                title: 'Login', login_result: error,
-                message: "Login failed", success: false
-            });
-        });
+      })
+      .catch(function (error) {
+          console.log("Catch: " + error);
+          res.status(403).json({
+              title: 'Login', login_result: error,
+              message: "Login failed", success: false
+          });
+      });
 });
 
 router.post('/register', function (req, res, next) {
     const username = req.body.username;
-    const password = req.body.password[0];
+    const password = req.body.password;
+    const password2 = req.body.password2;
+
     console.log(req.body);
-    bcrypt.hash(password, saltRounds, function (err, hash) {
+    bcrypt.hash(password, saltRounds, function (err, encryptedPassword) {
+        if(password === '' || password2 === '' || password2 !== password){
+            console.log("empty password")
+            res.status(403).json({
+                title: 'Register',
+                message: "Register failed",
+                success: false
+            });
+            return
+        }
         db.battleshipDB.one("insert into player(username, password) values($1, $2) returning *",
-            [username, hash])
+            [username, encryptedPassword])
             .then(function (data) {
                 console.log("Register User: " +data.username+ ", id: " +data.id);
                 res.json({
@@ -73,10 +84,11 @@ router.post('/register', function (req, res, next) {
             })
             .catch(function (error) {
                 console.log("ERROR:", error.message || error);
-                res.json({
-                    title: 'Login',
-                    success: false,
-                    login_result: error, message: "Registration failed"
+                res.status(403).json({
+                    title: 'Register',
+                    login_result: error,
+                    message: "Register failed",
+                    success: false
                 });
             })
     });

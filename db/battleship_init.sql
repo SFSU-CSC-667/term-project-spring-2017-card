@@ -6,8 +6,8 @@ CREATE DATABASE battleship;
 drop table if exists player;
 CREATE TABLE player (
     id SERIAL PRIMARY KEY,
-    username character varying(100) NOT NULL,
-    password character varying(100) NOT NULL,
+    username VARCHAR(16) UNIQUE NOT NULL CHECK (username <> ''),
+    password character varying(100),
     is_logged_in boolean DEFAULT false NOT NULL,
     socket_id character varying(50)
 );

@@ -11,7 +11,6 @@ function showErrorMessage(error) {
     $('#login-error').text(error.message);
     $('#login-error').show();
     console.log("error", error);
-    alertify.notify(error.message, 'error');
 }
 $(document).ready(() => {
 

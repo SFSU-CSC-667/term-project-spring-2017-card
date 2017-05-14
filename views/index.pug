@@ -40,10 +40,15 @@ block contenet
                             br
                             input(id="password-reg", name="password", type="password", class="form-control login-input", placeholder="password" required)
                             br
-                            input(id="password-confirm", name="password", type="password", class="form-control login-input", placeholder="password", data-match="#password-reg", data-match-error="Passwords don't match" required)
+                            input(id="password-confirm", name="password2", type="password", class="form-control login-input", placeholder="password", data-match="#password-reg", data-match-error="Passwords don't match" required)
                             br
                             div( id="register-error", hidden=true)
                             input(type="submit", value="Submit", name="submit", id="register-submit", class="login-button")
+                    if errors
+                      for error in errors
+                        .alert.alert-danger
+                          p= error.msg
+
 
     //- lobby section
     div#lobby(hidden=true)
