@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
+    "start:dev": "DATABASE_URL='postgres://chengjiu:password@localhost:5432/battleship' DEBUG=term-project-spring-2017-card:* nodemon ./bin/www",
     "build": "browserify frontend/main.js -o public/javascripts/bundle.js -t [ babelify --presets [ es2015 ] ]",
     "build:dev": "watchify frontend/main.js -o public/javascripts/bundle.js -t [ babelify --presets [ es2015 ] ] -v"
   },
