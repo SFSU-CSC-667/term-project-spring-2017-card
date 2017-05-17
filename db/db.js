@@ -6,8 +6,8 @@ let options = {
 
 const pgp = require('pg-promise')(options);
 
-const dbConnectionString = "postgres://chengjiu:password@localhost:5432/battleship";
+const localDB = "postgres://chengjiu:password@localhost:5432/battleship";
 
-const battleshipDB = pgp(dbConnectionString);
+const battleshipDB = pgp(process.env.DATABASE_URL || localDB);
 
 module.exports = {battleshipDB};

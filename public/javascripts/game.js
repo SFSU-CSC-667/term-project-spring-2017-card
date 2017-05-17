@@ -135,6 +135,7 @@ var Game = (function() {
     if(isWinner) {
       $('#turn-status').removeClass('alert-opponent-turn').removeClass('alert-your-turn')
               .addClass('alert-winner').html('You won! <a href="#" class="btn-leave-game">Play again</a>.');
+      //update winner players point.
     } else {
       $('#turn-status').removeClass('alert-opponent-turn').removeClass('alert-your-turn')
               .addClass('alert-loser').html('You lost. <a href="#" class="btn-leave-game">Play again</a>.');
@@ -166,12 +167,12 @@ var Game = (function() {
         squareX = j * (squareWidth + gridBorder) + gridBorder;
         squareY = i * (squareHeight + gridBorder) + gridBorder;
 
-        context[gridIndex].fillStyle = '#7799FF'
+        context[gridIndex].fillStyle = '#4169E1'
 
         // Highlight square if it's user's turn and user hovers over an unfired on, opponent square.
         if(j === squareHover.x && i === squareHover.y &&
                 gridIndex === 1 && grid[gridIndex].shots[i * gridCols + j] === 0 && turn) {
-          context[gridIndex].fillStyle = '#4477FF';
+          context[gridIndex].fillStyle = '#808080';
         }
 
         context[gridIndex].fillRect(squareX, squareY, squareWidth, squareHeight);

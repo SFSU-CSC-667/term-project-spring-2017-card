@@ -16,7 +16,7 @@ router.get('/login', function (req, res, next) {
 });
 
 router.get('/register', function (req, res, next) {
-    res.render('index');
+    res.render('register');
 });
 
 router.get('/game', function (req, res, next) {

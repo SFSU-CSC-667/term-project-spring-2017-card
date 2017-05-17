@@ -8,6 +8,9 @@ block contenet
       link(rel='stylesheet', href='/stylesheets/game.css')
       meta(name='viewport', content='width=device-width, initial-scale=1.0')
     body
+      h1(style= "text-align:center") Battleship
+      a( class="btn btn-link" id="nav-button" href="." style="float:right") Logout
+      a( class="btn btn-link" id="nav-button" href="#" style="float:right") Home
       .container
         .row.vertical-center-row
           .col-md-12
@@ -19,17 +22,16 @@ block contenet
             #waiting-room(style='display:none;')
               .row
                 .col-sm-4.col-sm-offset-4.text-center
-                  .panel.panel-primary
-                    .panel-heading Waiting Room
+                  .panel.panel-success
+                    .panel-heading In Queue
                     .panel-body
-                      p You are connected to the server.
-                      p Waiting for another player...
+                      p Please wait for another player to join
             #game(style='display:none;')
               .row
                 .col-md-12
                   .panel.panel-primary
                     .panel-heading
-                      | Battleship Game #
+                      | Room
                       span#game-number
                     .panel-body
                       .row
