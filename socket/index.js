@@ -90,6 +90,8 @@ const init = (app, server) => {
          * Handle client disconnect
         */
         socket.on('disconnect', data => {
+          db.none('update player set is_logged_in=$1, socket_id=$3 where id=$2 returning *',
+              [false, data.id, socket.id]);
           console.log( 'Socket ID ' + socket.id + ' disconnected.');
 
           leaveGame(socket);

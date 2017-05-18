@@ -167,7 +167,7 @@ var Game = (function() {
         squareX = j * (squareWidth + gridBorder) + gridBorder;
         squareY = i * (squareHeight + gridBorder) + gridBorder;
 
-        context[gridIndex].fillStyle = '#4169E1'
+        context[gridIndex].fillStyle = 'white'
 
         // Highlight square if it's user's turn and user hovers over an unfired on, opponent square.
         if(j === squareHover.x && i === squareHover.y &&

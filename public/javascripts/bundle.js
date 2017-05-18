@@ -129,7 +129,7 @@ $(document).ready(function () {
     //being called by login function
     function populateHeader(user) {
         $('#header').show();
-        $('#header #user').html("Welcome " + user.username + "!");
+        $('#header #user').append('<a href=.>Log out as ' + user.username + '</a>');
     }
 
     //call populateHeader function defined above

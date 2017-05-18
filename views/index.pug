@@ -2,18 +2,16 @@ extends layout
 
 block contenet
     //- header section
+    h1(style="text-align:center") Battleship
     div#header( class="header page-header row", hidden=true)
+        div( class="col-md-1")
         div( class="col-md-9")
-            h2
-                div#user(class="pull-left col-lg-6 text-primary")
-        div( class="col-md-1" style="position: relative;")
-            a( class="btn btn-warning" id="nav-button" href=".") Logout
-        div( class="col-md-2" style="position: relative;")
-            a( class="btn btn-link" id="nav-button" href="#") Home
+        div#user( class="col-md-2" style="position: relative; font-size:12pt; ")
 
     //- login/register section
-    div#login-page( hidden=false, class="page login-page")
-            div( class="center")
+    div#login-page( hidden=false, class="page")
+        div( class="col-md-4 full-height")
+            div( class=" login")
                 ul(class="nav nav-tabs")
                     li(class="active")
                         a( href="#login" data-toggle="tab" class="login-tab") Login
@@ -23,19 +21,15 @@ block contenet
                 div(id="myTabContent" class="tab-content")
                     div( class="tab-pane active in" id="login")
                         form( action="/login", method="POST" id="login-form")
-                            h2(class="login-title") Login
-                            hr
                             input(id="username", name="username", type="text", class="form-control login-input", placeholder="Username")
                             br
                             input(id="password", name="password", type="password", class="form-control login-input", placeholder="Password")
                             br
                             div( id="login-error", hidden=true)
-                            input(type="submit", value="Submit", name="submit", id="login-submit", class="login-button")
+                            input(type="submit", value="Login", name="submit", id="login-submit", class="btn btn-primary")
 
                     div( class="tab-pane fade" id="register")
                         form( action="/register", method="POST" id="register-form")
-                            h2(class="login-title") Register
-                            hr
                             input(id="username-reg", name="username", type="text", class="form-control login-input", placeholder="Username")
                             br
                             input(id="password-reg", name="password", type="password", class="form-control login-input", placeholder="Password")
@@ -43,7 +37,7 @@ block contenet
                             input(id="password-confirm", name="password2", type="password", class="form-control login-input", placeholder="Confirm password")
                             br
                             div( id="register-error", hidden=true)
-                            input(type="submit", value="Submit", name="submit", id="register-submit", class="login-button")
+                            input(type="submit", value="Register", name="submit", id="register-submit", class="btn btn-primary")
 
     //- lobby section
     div#lobby(hidden=true)
@@ -53,8 +47,9 @@ block contenet
                        h3 Leaderboard
                        ul(id="highscore" class="list-group")
 
-                div(class="col-md-7 height-85 chat")
+                div(class="col-md-7 height-70 chat")
                     include chat-fragment.pug
-
-                div( class="col-md-3" id="playButtonPosition")
-                      a(id='playGame' class="btn btn-success" href="/game") PLAY GAME
+                div( class="col-md-3 height-90")
+                    div(class="full-height")
+                        div( class="col-md-3" id="playButtonPosition")
+                              a(id='playGame' class="btn btn-success" href="/game") PLAY GAME
