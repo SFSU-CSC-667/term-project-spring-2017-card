@@ -12,3 +12,17 @@ Node.js, Javascript, Express, PostgreSQL
 * Chengjiu Hong
 * Darel Ogbonna
 * Robin Ma
+
+#### Heroku : 
+<https://team-card.herokuapp.com/>
+
+#### Running the Example :
+
+```
+git clone 'https://github.com/SFSU-CSC-667/term-project-spring-2017-card.git'
+cd to directory         // default: /term-project-spring-2017-card
+cd to db
+cd db.js // if needed psql local connection
+psql -f battleship_init.sql
+npm install
+npm start
