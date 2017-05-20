@@ -1,14 +1,12 @@
 extends layout
 
 block contenet
-    //- header section
     h1(style="text-align:center") Battleship
     div#header( class="header page-header row", hidden=true)
         div( class="col-md-1")
         div( class="col-md-9")
         div#user( class="col-md-2" style="position: relative; font-size:12pt; ")
 
-    //- login/register section
     div#login-page( hidden=false, class="page")
         div( class="col-md-4 full-height")
             div( class=" login")
@@ -39,7 +37,6 @@ block contenet
                             div( id="register-error", hidden=true)
                             input(type="submit", value="Register", name="submit", id="register-submit", class="btn btn-primary")
 
-    //- lobby section
     div#lobby(hidden=true)
         div(class="container-fluid")
             div(class="row")

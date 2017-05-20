@@ -1,7 +1,6 @@
 extends layout
 
 block contenet
-    //- header section
     div#header( class="header page-header row", hidden=true)
         div( class="col-md-9")
             h2
@@ -11,7 +10,6 @@ block contenet
         div( class="col-md-2" style="position: relative;")
             a( class="btn btn-link" id="nav-button" href="#") Home
 
-    //- login/register section
     div#login-page( hidden=false, class="page login-page")
             div( class="center")
                 ul(class="nav nav-tabs")
@@ -44,7 +42,7 @@ block contenet
                             br
                             div( id="register-error", hidden=true)
                             input(type="submit", value="Submit", name="submit", id="register-submit", class="login-button")
-    //- lobby section
+
     div#lobby(hidden=true)
         div(class="container-fluid")
             div(class="row")

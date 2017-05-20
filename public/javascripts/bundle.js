@@ -25,84 +25,81 @@ var chat = void 0;
 var me = '';
 
 var Chat = function () {
-    function Chat(user, socket) {
-        _classCallCheck(this, Chat);
+  function Chat(user, socket) {
+    _classCallCheck(this, Chat);
 
-        chat = this;
-        this.user = user.user;
-        this.userObj = user;
-        this.userSocket = socket;
-        this.$highScores = $('#highscore');
+    chat = this;
+    this.user = user.user;
+    this.userObj = user;
+    this.userSocket = socket;
+    this.$highScores = $('#highscore');
 
-        this.bindEvents();
-        this.bindSocketEvents();
+    this.bindEvents();
+    this.bindSocketEvents();
 
-        this.userSocket.emit(events.USER_JOINED, chat.user);
+    this.userSocket.emit(events.USER_JOINED, chat.user);
+  }
+
+  _createClass(Chat, [{
+    key: 'bindEvents',
+    value: function bindEvents() {
+      $('form#chat-form').submit(function (event) {
+        event.preventDefault();
+        chat.onMessageSubmit('#message', events.MESSAGE_SEND);
+      });
     }
+  }, {
+    key: 'onMessageReceived',
+    value: function onMessageReceived(msg, selector) {
+      var from = msg.user.username;
+      var color = from == me ? 'green' : '#009afd';
+      from = from == me ? 'Me' : msg.user.username;
+      $(selector).append('<p style= "color:' + color + '"">' + from + ': ' + msg.message + "<p/>");
+      $(selector).animate({ scrollTop: $(selector).prop("scrollHeight") }, 500);
+    }
+  }, {
+    key: 'onMessageSubmit',
+    value: function onMessageSubmit(selector, socketEvent) {
+      me = chat.user.username;
+      this.userSocket.emit(socketEvent, { message: $(selector).val(), user: chat.user });
+      $(selector).val('');
+      return false;
+    }
+  }, {
+    key: 'bindSocketEvents',
+    value: function bindSocketEvents() {
+      this.userSocket.on(events.MESSAGE_SEND, function (messageData) {
+        chat.onMessageReceived(messageData, '#messages');
+      });
+      this.userSocket.on(events.GET_HIGH_SCORES, chat.onGetHighScores);
+      this.userSocket.on(events.UPDATE_USER_SOCKET, chat.onUpdateUserSocket);
+    }
+  }, {
+    key: 'onUpdateUserSocket',
+    value: function onUpdateUserSocket(data) {
+      if (data.id == chat.user.id) {
+        chat.userObj.user = data;
+        chat.user = chat.userObj.user;
+      }
+    }
+  }, {
+    key: 'onGetHighScores',
+    value: function onGetHighScores(data) {
+      chat.$highScores.html("");
+      var usersList = data.usersList;
+      usersList.forEach(function (score) {
+        var highScoreItem = $('<li/>').addClass("score-list");
+        var $name = $('<div/>').addClass("score-name").html(score.username);
+        var $score = $('<div/>').addClass("score").html(score.score);
+        highScoreItem.append($name);
+        highScoreItem.append($score);
 
-    _createClass(Chat, [{
-        key: 'bindEvents',
-        value: function bindEvents() {
-            $('form#chat-form').submit(function (event) {
-                event.preventDefault();
-                chat.onMessageSubmit('#message', events.MESSAGE_SEND);
-            });
-        }
-    }, {
-        key: 'onMessageReceived',
-        value: function onMessageReceived(msg, selector) {
-            var from = msg.user.username;
-            var color = from == me ? 'green' : '#009afd';
-            from = from == me ? 'Me' : msg.user.username;
-            $(selector).append('<p style= "color:' + color + '"">' + from + ': ' + msg.message + "<p/>");
-            console.log("message received ", msg);
-            $(selector).animate({ scrollTop: $(selector).prop("scrollHeight") }, 500);
-        }
-    }, {
-        key: 'onMessageSubmit',
-        value: function onMessageSubmit(selector, socketEvent) {
-            me = chat.user.username;
-            this.userSocket.emit(socketEvent, { message: $(selector).val(), user: chat.user });
-            $(selector).val('');
-            console.log(me + " send a message.");
-            return false;
-        }
-    }, {
-        key: 'bindSocketEvents',
-        value: function bindSocketEvents() {
-            this.userSocket.on(events.MESSAGE_SEND, function (messageData) {
-                chat.onMessageReceived(messageData, '#messages');
-            });
-            this.userSocket.on(events.GET_HIGH_SCORES, chat.onGetHighScores);
-            this.userSocket.on(events.UPDATE_USER_SOCKET, chat.onUpdateUserSocket);
-        }
-    }, {
-        key: 'onUpdateUserSocket',
-        value: function onUpdateUserSocket(data) {
-            console.log(data);
-            if (data.id == chat.user.id) {
-                chat.userObj.user = data;
-                chat.user = chat.userObj.user;
-            }
-        }
-    }, {
-        key: 'onGetHighScores',
-        value: function onGetHighScores(data) {
-            chat.$highScores.html("");
-            var usersList = data.usersList;
-            usersList.forEach(function (score) {
-                var highScoreItem = $('<li/>').addClass("score-list");
-                var $name = $('<div/>').addClass("score-name").html(score.username);
-                var $score = $('<div/>').addClass("score").html(score.score);
-                highScoreItem.append($name);
-                highScoreItem.append($score);
+        chat.$highScores.append(highScoreItem);
+      });
+    }
+  }]);
 
-                chat.$highScores.append(highScoreItem);
-            });
-        }
-    }]);
-
-    return Chat;
+  return Chat;
 }();
 
 module.exports = { Chat: Chat };
@@ -114,80 +111,68 @@ var chatClass = require('./chat');
 var userClass = require('./user');
 var events = require('../constants/events');
 var socket = io.connect();
-
 var user;
 var chat;
 var clientIO;
 
 function showErrorMessage(error) {
-    $('#login-error').text(error.message);
-    $('#login-error').show();
-    console.log("error", error);
+  $('#login-error').text(error.message);
+  $('#login-error').show();
 }
 $(document).ready(function () {
+  function populateHeader(user) {
+    $('#header').show();
+    $('#header #user').append('<a href=.>Log out as ' + user.username + '</a>');
+  }
 
-    //being called by login function
-    function populateHeader(user) {
-        $('#header').show();
-        $('#header #user').append('<a href=.>Log out as ' + user.username + '</a>');
+  function login(result) {
+    if (!result.success) {
+      showErrorMessage(result);
+      return;
     }
+    clientIO = io();
+    user = new userClass.User(result.user);
+    chat = new chatClass.Chat(user, clientIO);
 
-    //call populateHeader function defined above
-    function login(result) {
-        if (!result.success) {
-            showErrorMessage(result);
-            return;
-        }
-        clientIO = io();
-        user = new userClass.User(result.user);
-        chat = new chatClass.Chat(user, clientIO);
-
-        //user login successful, send the username to the socket IO
-        socket.emit(events.USER_LOGIN, result.user.username);
-        //brocast user is Online
-        socket.on(events.USER_LOGIN_MESSAGE, function (data) {
-            $('#messages').append('<p style= "color: red' + '"">' + "System: " + data + " is online.</p>");
-        });
-
-        $('.page').hide();
-        $('#lobby').show();
-        populateHeader(user.user);
-    }
-
-    //click login-tab to change register/login
-    $('.login-tab').click(function (event) {
-        $('#register-error').hide();
-        $('#login-error').hide();
+    socket.emit(events.USER_LOGIN, result.user.username);
+    socket.on(events.USER_LOGIN_MESSAGE, function (data) {
+      $('#messages').append('<p style= "color: red' + '"">' + "System: " + data + " is online.</p>");
     });
 
-    //click login-submit to call login function defined above
-    $('input#login-submit').click(function (event) {
-        event.preventDefault();
-        $.post('/login', $('form#login-form').serialize(), function () {}, 'json').done(function (result) {
-            login(result);
-        }).fail(function (error) {
-            showErrorMessage(JSON.parse(error.responseText));
-        });
-    });
+    $('.page').hide();
+    $('#lobby').show();
+    populateHeader(user.user);
+  }
 
-    //clisk register form submit
-    $('input#register-submit').click(function (event) {
-        event.preventDefault();
-        $.post('/register', $('form#register-form').serialize(), function () {}, 'json').done(function (result) {
-            login(result);
-        }).fail(function (error) {
-            $('#register-error').text("Error registering");
-            $('#register-error').show();
-            console.log("error", error);
-        });
-    });
+  $('.login-tab').click(function (event) {
+    $('#register-error').hide();
+    $('#login-error').hide();
+  });
 
-    //click create game
-    $('button#createGame').click(function (event) {
-        "use strict";
-
-        clientIO.emit(events.CREATE_GAME, { user: user.user });
+  $('input#login-submit').click(function (event) {
+    event.preventDefault();
+    $.post('/login', $('form#login-form').serialize(), function () {}, 'json').done(function (result) {
+      login(result);
+    }).fail(function (error) {
+      showErrorMessage(JSON.parse(error.responseText));
     });
+  });
+
+  $('input#register-submit').click(function (event) {
+    event.preventDefault();
+    $.post('/register', $('form#register-form').serialize(), function () {}, 'json').done(function (result) {
+      login(result);
+    }).fail(function (error) {
+      $('#register-error').text("Error registering");
+      $('#register-error').show();
+    });
+  });
+
+  $('button#createGame').click(function (event) {
+    "use strict";
+
+    clientIO.emit(events.CREATE_GAME, { user: user.user });
+  });
 });
 
 },{"../constants/events":1,"./chat":2,"./user":4}],4:[function(require,module,exports){
@@ -196,7 +181,6 @@ $(document).ready(function () {
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var events = require('../constants/events');
-
 var thisUser = void 0;
 var socket = void 0;
 
